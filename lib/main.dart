@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,7 +14,7 @@ class MyWidget extends StatefulWidget {
 
 class _MyWidgetState extends State<MyWidget> {
   TextEditingController controller = TextEditingController();
-  List<Widget> ls = [];
+  List<String> ls = [];
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,22 +32,27 @@ class _MyWidgetState extends State<MyWidget> {
                 border: OutlineInputBorder(),
                 suffix: IconButton(
                     onPressed: () {
-                      ls.add(ListTile(
-                        title: Text(controller.text),
-                        trailing: IconButton(
-                            onPressed: () {}, icon: Icon(Icons.delete)),
-                      ));
-                      setState(() {
-                        
-                      });
+                      ls.add(controller.text);
+                      setState(() {});
                     },
                     icon: Icon(Icons.add))),
           )),
           Expanded(
               flex: 10,
-              child: ListView(
-                children: ls,
-              )),
+              child: ListView.builder(
+                  itemCount: ls.length,
+                  itemBuilder: (contex, index) {
+                    return ListTile(
+                        leading: Text('${index + 1}'),
+                        title: Text(ls[index]),
+                        trailing: IconButton(
+                            onPressed: () {
+                              ls.removeAt(index);
+                              setState(() {});
+                            },
+                            icon: Icon(Icons.delete)),
+                      );
+                  }))
         ],
       )),
     );
