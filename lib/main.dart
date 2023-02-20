@@ -15,6 +15,7 @@ class MyWidget extends StatefulWidget {
 class _MyWidgetState extends State<MyWidget> {
   TextEditingController controller = TextEditingController();
   List<String> ls = [];
+  int t = 0;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,33 +27,39 @@ class _MyWidgetState extends State<MyWidget> {
             height: 30,
           ),
           Expanded(
-              child: TextField(
-            controller: controller,
-            decoration: InputDecoration(
+            child: TextField(
+              controller: controller,
+              onEditingComplete: () {
+                t = int.parse(controller.text);
+                for (int i = 0; i < t; i++) 
+                ls.add(controller.text);
+                setState(() {});
+              },
+              onSubmitted: (val) {
+                print('onsubmitted');
+              },
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                suffix: IconButton(
-                    onPressed: () {
-                      ls.add(controller.text);
-                      setState(() {});
-                    },
-                    icon: Icon(Icons.add))),
-          )),
+              ),
+            ),
+          ),
           Expanded(
-              flex: 10,
-              child: ListView.builder(
-                  itemCount: ls.length,
-                  itemBuilder: (contex, index) {
-                    return ListTile(
-                        leading: Text('${index + 1}'),
-                        title: Text(ls[index]),
-                        trailing: IconButton(
-                            onPressed: () {
-                              ls.removeAt(index);
-                              setState(() {});
-                            },
-                            icon: Icon(Icons.delete)),
-                      );
-                  }))
+            flex: 5,
+            child: ListView.builder(
+                itemCount: ls.length,
+                itemBuilder: (contex, index) {
+                  return ListTile(
+                    leading: Text('${index}'),
+                    title: Text(ls[index]),
+                    trailing: IconButton(
+                        onPressed: () {
+                          ls.removeAt(index);
+                          setState(() {});
+                        },
+                        icon: Icon(Icons.delete)),
+                  );
+                }),
+          )
         ],
       )),
     );
